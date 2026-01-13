@@ -22,7 +22,7 @@ app.use(express.json());
 
 app.use("/api/v1/posts", PostRouter);
 
-app.use("/api/v1/comment", CommentRouter);
+app.use("/api/v1/comments", CommentRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello Prisma World");
