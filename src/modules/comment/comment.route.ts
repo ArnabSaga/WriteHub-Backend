@@ -14,10 +14,17 @@ router.post(
   CommentController.createComment
 );
 
-//* own comment can be delete => 1st he/she must be login, 2nd check it's him/her comment 
-router.delete("/:commentId", 
+//* own comment can be delete => 1st he/she must be login, 2nd check it's him/her comment
+router.delete(
+  "/:commentId",
   auth(UserRole.USER, UserRole.ADMIN),
   CommentController.deleteComment
-)
+);
+
+router.patch(
+  "/:commentId",
+  auth(UserRole.USER, UserRole.ADMIN),
+  CommentController.updateComment
+);
 
 export const CommentRouter: Router = router;

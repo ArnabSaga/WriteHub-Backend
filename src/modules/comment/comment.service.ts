@@ -1,4 +1,6 @@
 import { prisma } from "../../lib/prisma";
+import { CommentStatus } from "../../../generated/prisma/enums";
+import { date } from "better-auth/*";
 
 const createComment = async (payload: {
   content: string;
@@ -76,9 +78,40 @@ const deleteComment = async (commentId: string, authorId: string) => {
 
   return await prisma.comment.delete({
     where: {
-      id: commentData.id
-    }
-  })
+      id: commentData.id,
+    },
+  });
+};
+
+const updateComment = async (
+  commentId: string,
+  data: {
+    content?: string;
+    satuts?: CommentStatus;
+  },
+  authorId: string
+) => {
+  const commentData = await prisma.comment.findFirst({
+    where: {
+      id: commentId,
+      authorId,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!commentData) {
+    throw new Error("User provided input is invaild!  ");
+  }
+
+  return await prisma.comment.update({
+    where: {
+      id: commentData.id,
+      authorId,
+    },
+    data,
+  });
 };
 
 export const CommentService = {
@@ -86,4 +119,5 @@ export const CommentService = {
   getCommentById,
   getCommentByAuthor,
   deleteComment,
+  updateComment,
 };
