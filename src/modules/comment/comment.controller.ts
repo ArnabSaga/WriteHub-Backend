@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { CommentService } from "./comment.service";
 
 const createComment = async (req: Request, res: Response) => {
@@ -88,16 +88,16 @@ const moderateComment = async (req: Request, res: Response) => {
     const { commentId } = req.params;
     const moderateData = req.body;
 
-
     const result = await CommentService.moderateComment(
       commentId as string,
       moderateData
     );
     res.status(200).json(result);
-  } catch (error: any) {
-    console.log(error);
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Comment update Failed";
     res.status(400).json({
-      error: "Comment update Failed",
+      error: errorMessage,
       details: error,
     });
   }
